@@ -10,4 +10,9 @@ public class LibraryController {
         model.addAttribute("pageTitle", "Bookhive Library");
         return "home"; // templates -> home.html
     }
+    @GetMapping("/about")
+    public String about(Model model) {
+        model.addAttribute("pageTitle", "About Playdata Library");
+        return "about";
+    }
 }
