@@ -1,7 +1,6 @@
 package io.playdata.springboot03.controller;
 
 import io.playdata.springboot03.model.User;
-import io.playdata.springboot03.repository.UserRepository;
 import io.playdata.springboot03.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,5 +35,11 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 값이 없음을 나타내는 응답
         }
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{userId}") // http://localhost:8080/users/1
+    public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
+        userService.deleteUser(userId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
