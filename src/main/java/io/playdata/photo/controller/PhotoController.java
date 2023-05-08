@@ -22,7 +22,7 @@ public class PhotoController {
     // 모든 사진 정보를 조회하는 메소드
     @GetMapping("/")
     public String index(Model model) { // View(웹페이지)로 전달할 데이터 묶음
-        model.addAttribute("photos", photoService.getAllPhotos());
+        model.addAttribute("photos", photoService.getAllPhotos()); // Forward로 전달, Redirect면 전달 X
         return "index"; // (src/main/resources/templates/)...(.html)
     }
 
@@ -35,7 +35,9 @@ public class PhotoController {
 
     // 사진을 추가하는 메소드
     @PostMapping("/add")
-    public ModelAndView add(@ModelAttribute("photoForm") @Validated PhotoForm photoForm, BindingResult bindingResult, Model model) {
+    public ModelAndView add(@ModelAttribute("photoForm") @Validated PhotoForm photoForm, BindingResult bindingResult,
+                            Model model,
+                            RedirectAttributes redirectAttributes) {
         ModelAndView mav = new ModelAndView();
         if(bindingResult.hasErrors()) { // @Validated -> 검증
             // 검증결과에 오류가 있는 경우
@@ -44,7 +46,9 @@ public class PhotoController {
         }
         photoService.addPhoto(photoForm); // 문제가 없다면...
         mav.setViewName("redirect:/"); // 메인페이지로 redirect하겠다 -> 주소가 바뀌면서 원래 홈페이지로 가겠다
-        mav.addObject("message", "사진이 정상 추가되었습니다"); // redirect - 안보이는게 정상
+        // 얘는 안 뜸
+//        mav.addObject("message", "사진이 정상 추가되었습니다"); // redirect - 안보이는게 정상
+        redirectAttributes.addFlashAttribute("message", "사진이 정상 추가되었습니다");
         return mav;
     }
 
@@ -67,6 +71,7 @@ public class PhotoController {
         }
         photoService.updatePhoto(photoForm);
         mav.setViewName("redirect:/");
+        // 뜸
         redirectAttributes.addFlashAttribute("message", "사진 수정이 성공했습니다");
         // 전달이 되어야 함.
         return mav;
@@ -78,7 +83,7 @@ public class PhotoController {
         ModelAndView mav = new ModelAndView();
         photoService.deletePhoto(id);
         mav.setViewName("redirect:/"); // 메인 페이지로 삭제뒤 리다이렉트
-        mav.addObject("message", "사진이 삭제되었습니다");
+        mav.addObject("message", "사진이 삭제되었습니다"); // 안 뜸
         return mav;
     }
 }

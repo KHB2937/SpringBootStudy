@@ -8,7 +8,7 @@
 <div class="container">
     <h1 class="mt-5">Add Photo</h1>
     <!-- PhotoForm 객체를 전달받아서 입력폼을 생성합니다. -->
-    <form th:object="${photoForm}" method="post">
+    <form th:object="${photoForm}" method="post"> <!-- 현재 경로에서 post요청 -->
         <div class="mb-3">
             <label for="title" class="form-label">Title:</label>
             <input type="text" id="title" name="title" class="form-control" th:value="${photoForm.title}">

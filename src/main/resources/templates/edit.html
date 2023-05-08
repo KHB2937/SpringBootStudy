@@ -8,6 +8,7 @@
 <div class="container">
     <h1 class="mt-5">Edit Photo</h1>
     <!-- PhotoForm 객체를 전달받아서 입력폼을 생성합니다. -->
+<!--    <form th:object="${photoForm}" method="post" action="./">-->
     <form th:object="${photoForm}" method="post" action="/edit">
         <input type="hidden" th:field="*{id}">
         <div class="mb-3">
