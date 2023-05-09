@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>반려동물 등록 시스템</title>
+    <!-- https://getbootstrap.com/docs/4.3/getting-started/download/ -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h1>반려동물 등록시스템</h1>
+                <p>당신의 가족의 정보를 등록하세요!</p>
+                <p>아래의 내용이 필요합니다.</p>
+                <ul>
+                    <li>이름</li>
+                    <li>품종</li>
+                    <li>사진</li>
+                    <li>울음소리</li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <img src="/images/pet.jpg" alt="My Pet" class="img-fluid">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <a href="/add" class="btn btn-primary">추가하기</a>
+            </div>
+        </div>
+        <div class="row">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Race</th>
+                    <th>Image</th>
+                    <th>Voice</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="pet : ${pets}">
+                    <td th:text="${pet.id}"></td>
+                    <td th:text="${pet.name}"></td>
+                    <td th:text="${pet.race}"></td>
+                    <td>
+                        <img th:if="${pet.image != null}" th:src="@{'/upload/' + ${pet.image}}" class="img-fluid" alt="" width="50px">
+                        <span th:if="${pet.image == null}">-</span>
+                    </td>
+                    <td>
+                        <audio th:if="${pet.voice != null}" th:src="@{'/upload/' + ${pet.voice}}" controls></audio>
+                        <span th:if="${pet.voice == null}">-</span>
+                    </td>
+                    <td>
+                        <a th:href="@{/edit/{id}(id=${pet.id})}" class="btn btn-primary btn-sm">Edit</a>
+                        <a th:href="@{/delete/{id}(id=${pet.id})}" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
