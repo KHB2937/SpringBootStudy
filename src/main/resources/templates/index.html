@@ -18,7 +18,7 @@
     <!-- 그냥 message하는 string 값을 넣어줌 -->
 <!--    <p th:text="${tShirts}" />-->
     <!-- 테이블 형태로 존재하는 tShirts를 표현 -->
-    <table border="1">
+    <table border="1" th:if="${!tShirts.isEmpty()}">
         <thead>
             <tr>
                 <!-- ID, 색상, 로고, 사이즈, 가격 -->
@@ -49,6 +49,7 @@
             </tr>
         </tbody>
     </table>
+    <p th:unless="${!tShirts.isEmpty()}">등록된 티셔츠가 없습니다!</p>
     <br>
     <button type="button" onclick="location.href = '/showNewTShirtForm'">추가하기</button>
 </body>

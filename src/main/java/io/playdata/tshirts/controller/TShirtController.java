@@ -25,6 +25,7 @@ public class TShirtController {
         // Output -> View (HTML) -> HTML / 템플릿엔진 (Model을 통해서 전달 받은 데이터를 표현)
         List<TShirt> tShirts = tShirtService.getAllTShirts(); // tShirts 데이터를 DB로부터 Service를 통해 끌어왔고,
 //        model.addAttribute("message", "티셔츠 많이 팔고 싶다");
+
         model.addAttribute("message", "티셔츠 50% 할인 중!");
         model.addAttribute("tShirts", tShirts); // 그 데이터를 Model에 담았음.
         return "index"; // 어떠한 html 파일에 연동할 것이냐? (resources/templates/{index}.html)
