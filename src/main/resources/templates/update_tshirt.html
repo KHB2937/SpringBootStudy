@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<!-- thymeleaf를 사용할 예정, 이 파일이 타임리프를 사용 중이라는 표시 -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>티셔츠 수정 폼</title>
+    <!--  브라우저 창에 뜨는 제목을 바꿔주려면 <title>  -->
+</head>
+<body>
+    <!-- 타임리프로 인식되고 있기 때문에, 스프링부트를 재시작하거나 프로젝트 빌드하면 수정내용이 반영 -->
+    <h1>티셔츠 수정 폼</h1>
+    <!-- model.message -> ${message}로 호출하면 불러올 수 있음 -->
+<!--    <p th:text="${message}" />-->
+    <!-- model 안에 있는 message라는 attribute를 호출해서 사용 -->
+    <!--    <p th:text="message" />-->
+    <!-- 그냥 message하는 string 값을 넣어줌 -->
+    <!--    <p th:text="${tShirts}" />-->
+    <!--  form 태그를 통해서 tShirt를 만들어 줄건데, post라는 방식으로 /saveTShirt에 요청을 보내줘야함. 그 안에는 tShirt 객체  -->
+    <form th:object="${tShirt}" method="post" action="/updateTShirt">
+    <!-- color, logo, size, price -->
+        <input type="hidden" name="id" th:value="${tShirt.id}">
+        <div>
+            <label>색상</label>
+            <input name="color" th:value="${tShirt.color}">
+        </div>
+        <div>
+            <label>로고</label>
+            <input name="logo" th:value="${tShirt.logo}">
+        </div>
+        <div>
+            <label>사이즈</label>
+            <input name="size" th:value="${tShirt.size}">
+        </div>
+        <div>
+            <label>가격</label>
+            <input name="price" th:value="${tShirt.price}">
+        </div>
+        <!-- submit : form에 있는 데이터를 가지고, 요청을 보내겠다 -->
+        <br>
+        <button type="submit">수정</button>
+        <button type="button" onclick="location.href = '/'">뒤로가기</button>
+    </form>
+</body>
+</html>

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class TShirtController {
         return "index"; // 어떠한 html 파일에 연동할 것이냐? (resources/templates/{index}.html)
     }
 
-    @GetMapping("/showNewTShirtForm")
+    @GetMapping("/showNewTShirtForm") // forward로 던지기 때문에 이 url
     public String showNewTShirtForm(Model model) {
         TShirt tShirt = new TShirt();
         model.addAttribute("message", "당신의 티셔츠를 만들어보세요!");
@@ -45,20 +46,29 @@ public class TShirtController {
 
     @GetMapping("/showUpdateTShirtForm/{id}")
     public String showUpdateTShirtForm(@PathVariable(value = "id") Long id, Model model) {
-        TShirt tShirt = tShirtService.getTShirtById(id);
-        model.addAttribute("tShirt", tShirt);
-        return "update_tshirt";
+        TShirt tShirt = tShirtService.getTShirtById(id); // id를 통해서 조회된 tshirt를
+        model.addAttribute("tShirt", tShirt); // model을 통해서 전달
+        return "update_tshirt"; // view의 링크로 forward.
+        // model을 유지하고 전달하고, url 주소도 그대로
     }
 
     @PostMapping("/updateTShirt")
-    public String updateTShirt(@ModelAttribute("tShirt") TShirt tShirt) {
+    public String updateTShirt(@ModelAttribute("tShirt") TShirt tShirt,
+                               Model model,
+                               RedirectAttributes redirectAttributes) {
         tShirtService.updateTShirt(tShirt);
-        return "redirect:/";
+        model.addAttribute("message", "수정이 완료되었습니다!");
+        // 위의 코드는 작동하지 않음 -> forward 방식이라서.
+        redirectAttributes.addFlashAttribute("message", "수정이 완료되었습니다!");
+        redirectAttributes.addFlashAttribute("message2", "수정이 완료되었습니다!");
+        return "redirect:/"; // redirect 방식으로 index로 이동. -> 주소값을 던지려는 그 대상으로 바꾸면서 model을 유지하지 않은채로 전달
     }
 
     @GetMapping("/deleteTShirt/{id}")
-    public String deleteTShirt(@PathVariable(value = "id") Long id) {
+    public String deleteTShirt(@PathVariable(value = "id") Long id,
+                               RedirectAttributes redirectAttributes) {
         tShirtService.deleteTShirtById(id);
+        redirectAttributes.addFlashAttribute("message2", "삭제가 완료되었습니다!");
         return "redirect:/";
     }
 }

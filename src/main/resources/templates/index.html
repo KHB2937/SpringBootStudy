@@ -12,10 +12,44 @@
     <!-- http://localhost:8080/ -->
     <!-- model.message -> ${message}로 호출하면 불러올 수 있음 -->
     <p th:text="${message}" />
+    <p th:text="${message2}" />
     <!-- model 안에 있는 message라는 attribute를 호출해서 사용 -->
-    <p th:text="message" />
+<!--    <p th:text="message" />-->
     <!-- 그냥 message하는 string 값을 넣어줌 -->
-    <p th:text="${tShirts}" />
+<!--    <p th:text="${tShirts}" />-->
+    <!-- 테이블 형태로 존재하는 tShirts를 표현 -->
+    <table border="1">
+        <thead>
+            <tr>
+                <!-- ID, 색상, 로고, 사이즈, 가격 -->
+                <th>ID</th>
+                <th>색상</th>
+                <th>로고</th>
+                <th>사이즈</th>
+                <th>가격</th>
+                <th>기능</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- 모든 티셔츠를 반복해서 출력 -->
+            <tr th:each="tShirt : ${tShirts}">
+                <td th:text="${tShirt.id}" />
+                <td th:text="${tShirt.color}" />
+                <td th:text="${tShirt.logo}" />
+                <td th:text="${tShirt.size}" />
+                <td th:text="${tShirt.price}" />
+                <td>
+                   <button>
+                       <a th:href="@{/showUpdateTShirtForm/{id}(id=${tShirt.id})}">수정</a>
+                   </button>
+                   <button>
+                       <a th:href="@{/deleteTShirt/{id}(id=${tShirt.id})}">삭제</a>
+                   </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
     <button type="button" onclick="location.href = '/showNewTShirtForm'">추가하기</button>
 </body>
 </html>
