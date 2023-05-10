@@ -2,13 +2,17 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>로그인 페이지</title>
+    <title>가입 페이지</title>
 </head>
 <body>
-    <form action="/login" method="post">
+    <form th:object="${account}" action="/join" method="post">
         <div>
             <label>ID :</label>
             <input name="loginID">
+        </div>
+        <div>
+            <label>이름 :</label>
+            <input name="name">
         </div>
         <div>
             <label>PW :</label>
@@ -16,12 +20,7 @@
         </div>
         <br>
         <!-- submit => form을 작동 -->
-        <button type="submit">로그인</button>
-        <!-- button => form 작동 X -->
-        <button type="button">
-            <a href="/join">가입</a>
-        </button>
+        <button type="submit">가입</button>
     </form>
-    <h1 th:text="${msg}"></h1>
 </body>
 </html>
