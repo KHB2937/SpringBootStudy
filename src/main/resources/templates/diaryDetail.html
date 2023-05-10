@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${diary.title}">Diary Detail</title>
+</head>
+<body>
+<h1 th:text="${diary.title}">Diary Detail</h1>
+<table>
+    <tr>
+        <th>ID</th>
+        <td th:text="${diary.id}"></td>
+    </tr>
+    <tr>
+        <th>Title</th>
+        <td th:text="${diary.title}"></td>
+    </tr>
+    <tr>
+        <th>Content</th>
+        <td th:text="${diary.content}"></td>
+    </tr>
+    <tr>
+        <th>Image</th>
+        <!-- 이미지 파일은 별도의 URL 경로로 출력한다. -->
+        <td><img height="200px" th:src="@{'/upload/'+${diary.image}}" width="200px"/></td>
+    </tr>
+    <tr>
+        <th>Sound</th>
+        <!-- 사운드 파일은 별도의 URL 경로로 출력한다. -->
+        <td>
+            <audio controls="controls" th:src="@{'/upload/'+${diary.sound}}">
+                Your browser does not support the audio element.
+            </audio>
+        </td>
+    </tr>
+    <tr>
+        <th>Created At</th>
+        <td th:text="${diary.createAt}"></td>
+    </tr>
+</table>
+<hr>
+<!-- 다이어리 수정을 위한 폼 생성 -->
+<h2>Edit the diary</h2>
+<form method="post" th:action="@{/__${diary.id}__}" enctype="multipart/form-data">
+    <div>
+        <label for="title">Title:</label>
+        <input id="title" name="title" th:value="${diary.title}" type="text">
+    </div>
+    <div>
+        <label for="content">Content:</label>
+        <textarea id="content" name="content" th:text="${diary.content}"></textarea>
+    </div>
+    <div>
+        <label for="image">Image:</label>
+        <input id="image" name="imageFile" th:value="${diary.image}" type="file">
+    </div>
+    <div>
+        <label for="sound">Sound:</label>
+        <input id="sound" name="soundFile" th:value="${diary.sound}" type="file">
+    </div>
+    <button type="submit">Save</button>
+</form>
+<br>
+<a href="/">Back to Diary List</a>
+</body>
+</html>
