@@ -24,7 +24,7 @@ public class MemoUserController {
             HttpSession session,
             Model model,
             // Cookie cookie = new Cookie("name", user.getName());
-            @CookieValue("name") String name) { // String -> 연결할 view의 이름
+            @CookieValue(value = "name", required = false) String name) { // String -> 연결할 view의 이름
         // 로그인이 되었을 때
         if (session != null) { // session == null
             // 1) 쿠키에 저장된 session ID를 날려버렸을 때
@@ -34,7 +34,7 @@ public class MemoUserController {
             if (login != null) { // set 안해준 attribute는 null 취급
                 // session은 있는데 login을 안한 거
                 if ((boolean) login) { // 형변환
-                    model.addAttribute("msg", name + "님의 로그인을 환영합니다");
+                    model.addAttribute("msg",  name != null ? name : "알 수 없음" + "님의 로그인을 환영합니다");
                     return "main"; // forward
                 }
             }
