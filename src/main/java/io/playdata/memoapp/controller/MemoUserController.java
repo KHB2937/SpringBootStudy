@@ -89,15 +89,27 @@ public class MemoUserController {
             RedirectAttributes redirectAttributes,
             Model model
     ) throws IOException {
-        MemoUserDTO createdUser = memoUserService.createMemoUser(user, imageFile);
-        if (createdUser == null) { // ID가 중복된 것
-//            return "redirect:/join";
-            model.addAttribute("msg", "중복된 ID입니다");
+//        MemoUserDTO createdUser = memoUserService.createMemoUser(user, imageFile);
+//        if (createdUser == null) { // ID가 중복된 것
+////            return "redirect:/join";
+//            model.addAttribute("msg", "중복된 ID입니다");
+//            return "join";
+//        }
+//        // <h3 th:text="${msg}"></h3>
+//        redirectAttributes.addFlashAttribute("msg", "정상적으로 가입되었습니다");
+//        return "redirect:/"; // '/' 경로로 주소값까지 바꿔주면서 이동 시키겠다
+        try {
+            MemoUserDTO createdUser = memoUserService.createMemoUser(user, imageFile);
+            redirectAttributes.addFlashAttribute("msg", "정상적으로 가입되었습니다");
+            return "redirect:/"; // '/' 경로로 주소값까지 바꿔주면서 이동 시키겠다
+        } catch (Exception e) {
+            // "이미 사용중인 ID입니다"
+            // "잘못된 이미지 타입입니다. (JPG, PNG)"
+            // -> e.getMessage()
+            model.addAttribute("msg", e.getMessage());
+            // <h3 th:text="${msg}"></h3>
             return "join";
         }
-        // <h3 th:text="${msg}"></h3>
-        redirectAttributes.addFlashAttribute("msg", "정상적으로 가입되었습니다");
-        return "redirect:/"; // '/' 경로로 주소값까지 바꿔주면서 이동 시키겠다
     }
 
     // post /login

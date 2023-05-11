@@ -33,13 +33,25 @@ public class MemoUserService {
     private String uploadPath;
 
     // 이미지 파일 업로드 기능이 추가된 서비스 메소드
-    public MemoUserDTO createMemoUser(MemoUserDTO user, MultipartFile imageFile) throws IOException {
+    public MemoUserDTO createMemoUser(MemoUserDTO user, MultipartFile imageFile) throws Exception {
         if (memoUserRepository.findByLoginId(user.getLoginId()) != null) {
-            return null;
+//            return null; // 중복으로 인한 Null
+            // "이미 사용중인 ID입니다" : 오류 메시지
+            throw new Exception("이미 사용중인 ID입니다"); // throw new 에러 발생
         }
-        // TODO : 이미지가 아니더라도 들어감 ㅋ (이미지만 들어가게!)
+        // 이미지가 아니더라도 들어감 (이미지만 들어가게!)
         // TODO : 이미지 볼 수가 없음 (업로드한 이미지를 확인할 수 있게)
         if (imageFile != null && !imageFile.isEmpty()) { // ! : not
+            String contentType = imageFile.getContentType();
+            // contentType 검사를 통해 jpeg, png 타입만 들어가게
+            boolean isJPEG = contentType.contains("image/jpeg");
+            boolean isPNG = contentType.contains("image/png");
+            if (!isJPEG && !isPNG) {
+//                return null; // 이미지 타입 오류 인한 Null
+                // "잘못된 이미지 타입입니다. (JPG, PNG)" : 오류 메시지
+                // 의도적으로 에러 발생 -> 잘못된 접근에 대해서 가이드 메시지
+                throw new Exception("잘못된 이미지 타입입니다. (JPG, PNG)"); // throw new 에러 발생
+            }
             // 새로운 파일 이름
             // 시스템상의 현재 밀리초시간 : System.currentTimeMillis()
             // 확장자까지 포함된 파일 이름 : .getOriginalFilename()
