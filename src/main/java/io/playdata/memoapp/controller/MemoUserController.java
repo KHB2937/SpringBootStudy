@@ -1,6 +1,7 @@
 package io.playdata.memoapp.controller;
 
 import io.playdata.memoapp.model.MemoUserDTO;
+import io.playdata.memoapp.service.MemoService;
 import io.playdata.memoapp.service.MemoUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,9 @@ public class MemoUserController {
     // 비즈니스 로직을 사용해주기 위해서 Service
     @Autowired // 의존성 주입
     private MemoUserService memoUserService;
+
+    @Autowired
+    private MemoService memoService;
 
     @GetMapping("/") // http://localhost:8080/
     public String index(
@@ -47,6 +51,8 @@ public class MemoUserController {
                     model.addAttribute("msg",  (name != null ? name : "알 수 없음") + "님의 로그인을 환영합니다");
                     // model로 주입을 해서 main에다가 전달
                     model.addAttribute("img", image);
+                    Long userId = (long) session.getAttribute("user");
+                    model.addAttribute("memo", memoService.getMemoByUserId(userId));
                     return "main"; // forward
                 }
             }
@@ -138,6 +144,7 @@ public class MemoUserController {
 //        model.addAttribute("msg", user.getName() + "님의 로그인을 환영합니다");
         // -> redriect라서 작동 안하는 코드
         session.setAttribute("login", true); // login 여부를 true 바꾸고, 그 세션을 서버 저장
+        session.setAttribute("user", user.getId());
         // 유저 이름
         Cookie cookie = new Cookie("name", user.getName());
         cookie.setMaxAge(60 * 60); // 1시간 (1초 단위)

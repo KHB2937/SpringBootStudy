@@ -11,5 +11,21 @@
         <img width="240" height="180" th:src="@{'/upload/'+${img}}">
     </div>
     <button onclick="location.href = '/logout'">로그아웃</button>
+    <!-- 메모 폼 -->
+    <div>
+        <br>
+        <form method="post" action="/memo">
+            <div>
+                <textarea name="text"></textarea>
+            </div>
+            <div>
+                <button>메모 작성</button>
+            </div>
+        </form>
+    </div>
+    <!-- 메모 리스트 -->
+    <ul th:each="m : ${memo}">
+        <li th:text="${m.text}"></li>
+    </ul>
 </body>
 </html>
