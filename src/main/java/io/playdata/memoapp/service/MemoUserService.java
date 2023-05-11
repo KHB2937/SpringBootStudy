@@ -25,4 +25,9 @@ public class MemoUserService {
     }
 
     // 로그인
+    // loginId와 password를 통해서 유저를 찾는 서비스 메소드
+    public MemoUserDTO login(String loginId, String password) {
+        return memoUserRepository.findByLoginIdAndPassword(loginId, password);
+    }
+
 }

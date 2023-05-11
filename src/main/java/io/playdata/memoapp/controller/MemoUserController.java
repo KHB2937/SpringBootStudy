@@ -5,10 +5,7 @@ import io.playdata.memoapp.service.MemoUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller // 스프링에 Controller임을 등록
@@ -52,5 +49,22 @@ public class MemoUserController {
         // <h3 th:text="${msg}"></h3>
         redirectAttributes.addFlashAttribute("msg", "정상적으로 가입되었습니다");
         return "redirect:/"; // '/' 경로로 주소값까지 바꿔주면서 이동 시키겠다
+    }
+
+    // post /login
+    @PostMapping("/login")
+    public String login(
+            @RequestParam("loginId") String loginId, // <input name="loginId" type="text">
+            @RequestParam("password") String password, // <input name="loginId" type="text">
+            Model model,
+            RedirectAttributes redirectAttributes
+    ) {
+        MemoUserDTO user = memoUserService.login(loginId, password);
+        if (user == null) {
+            redirectAttributes.addFlashAttribute("msg", "인증 정보가 올바르지 않습니다");
+            return "redirect:/";
+        }
+        model.addAttribute("msg", user.getName() + "님의 로그인을 환영합니다");
+        return "main";
     }
 }

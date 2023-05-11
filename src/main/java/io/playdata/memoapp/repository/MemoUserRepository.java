@@ -10,4 +10,6 @@ public interface MemoUserRepository extends JpaRepository<MemoUserDTO, Long> { /
 
     // loginId로 User를 찾는 메소드
     public MemoUserDTO findByLoginId(String loginId);
+
+    public MemoUserDTO findByLoginIdAndPassword(String loginId, String password);
 }
