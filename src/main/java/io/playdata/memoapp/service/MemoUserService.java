@@ -35,8 +35,8 @@ public class MemoUserService {
         return memoUserRepository.save(user);
     }
 
-    @Value("${upload.path}") // @Value : application.properties
-    private String uploadPath;
+//    @Value("${upload.path}") // @Value : application.properties
+//    private String uploadPath;
 
     /*
     *     @Bean // 등록 시켜주겠다
