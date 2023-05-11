@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>로그인</title>
+</head>
+<body>
+<!--
+    (1) 로그인 폼과 버튼 : (loginId, password) post -> /login
+    (2) '가입'으로 이동하는 버튼 : get -> /join
+    (3) 메시지 : msg (model?redirect? attribute)
+-->
+    <div>
+        <!-- 1) 요청하는 방법 (method) 2) 요청하는 경로 (action) 3) th : object(class) -->
+        <form method="post" action="/login">
+            <!-- input -->
+            <div>
+                <label>ID : </label>
+                <!-- 1) 어떠한 이름(속성)의 데이터를 입력 받을지 (name) 2) 어떠한 방식 (type) -->
+                <input name="loginId" type="text">
+            </div>
+            <div>
+                <label>PW : </label>
+                <!-- 1) 어떠한 이름(속성)의 데이터를 입력 받을지 (name) 2) 어떠한 방식 (type) -->
+                <input name="password" type="password"> <!-- 암호는 주변 사람이 볼 수 없게 '마스킹' -->
+            </div>
+            <br> <!-- 한 줄 엔터 -->
+            <div>
+                <!-- 로그인 버튼, 가입 버튼 -->
+                <!-- type : submit (default : form을 제출 -> action이 일어나게 함) -->
+                <button type="submit">로그인</button>
+                <!-- type : button (form 작동과 관련 없음) -->
+                <!-- onclick : 눌렀을 때 특정한 동작 (js) -->
+                <!-- location.href = '{경로}' => 이동 -->
+                <button type="button" onclick="location.href = '/join'">가입</button>
+            </div>
+            <!-- th:text : 내부에 텍스트 값을 설정 -->
+            <!-- th:text=${...} : model이나 redirect 등으로 전달 받은 attibute를 ... 이라는 이름으로 사용 -->
+            <h3 th:text="${msg}"></h3>
+        </form>
+    </div>
+</body>
+</html>
