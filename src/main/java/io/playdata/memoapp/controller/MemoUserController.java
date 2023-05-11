@@ -6,12 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 @Controller // 스프링에 Controller임을 등록
 @RequestMapping // @RequestMapping("/") -> 기본 index 경로, 루트 ('/') 경로에 이 컨트롤러를 연결
@@ -50,8 +52,29 @@ public class MemoUserController {
     // 가입 페이지 (/join) -> GetMapping
     @GetMapping("/join")
 //    public String join() {
-    public String join(Model model) {
-        // TODO : 로그인이 되었을 때 -> 메인으로 돌려주는.
+    public String join(
+            HttpSession session,
+            Model model,
+            // Cookie cookie = new Cookie("name", user.getName());
+            // required = false : 없어도 됨 (기본 값은 required = true)
+            @CookieValue(value = "name", required = false) String name) { // String -> 연결할 view의 이름
+        // 로그인이 되었을 때
+        if (session != null) { // session == null
+            // 1) 쿠키에 저장된 session ID를 날려버렸을 때
+            // 2) 애초에 없었을 때
+            // 세션 안에서는 모든 타입이 Object
+            Object login = session.getAttribute("login");
+            if (login != null) { // set 안해준 attribute는 null 취급
+                // session은 있는데 login을 안한 거
+                if ((boolean) login) { // 형변환
+                    // (조건 ? true 값 : false 값)
+                    // (name != null ? name : "알 수 없음")
+                    model.addAttribute("msg",  (name != null ? name : "알 수 없음") + "님의 로그인을 환영합니다");
+                    return "main"; // forward
+                }
+            }
+        }
+        // 로그인이 안 되었을 때
         // 폼 입력할 때 입력을 받을 객체 전달 (user)
         model.addAttribute("user", new MemoUserDTO());
         return "join"; // join.html
@@ -61,11 +84,12 @@ public class MemoUserController {
     @PostMapping("/join")
     public String joinUser(
             @ModelAttribute("user") MemoUserDTO user, // th:object="${user}"
-            // TODO : imageFile
+            // imageFile <input type="file" name="imageFile">
+            @RequestParam("imageFile") MultipartFile imageFile,
             RedirectAttributes redirectAttributes,
             Model model
-    ) {
-        MemoUserDTO createdUser = memoUserService.createMemoUser(user);
+    ) throws IOException {
+        MemoUserDTO createdUser = memoUserService.createMemoUser(user, imageFile);
         if (createdUser == null) { // ID가 중복된 것
 //            return "redirect:/join";
             model.addAttribute("msg", "중복된 ID입니다");
