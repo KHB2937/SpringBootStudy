@@ -24,7 +24,7 @@
         </div>
         <div>
             <label>이미지 : </label>
-            <input type="file" name="image">
+            <input type="text" name="image">
             <!-- TODO : 프로필 이미지 업로드 -->
         </div>
         <br>
@@ -32,6 +32,7 @@
             <button>가입</button>
             <button type="button" onclick="location.href= '/'">취소</button>
         </div>
+        <h3 th:text="${msg}"></h3>
     </form>
 </body>
 </html>

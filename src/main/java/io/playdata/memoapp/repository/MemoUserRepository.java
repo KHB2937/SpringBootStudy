@@ -7,4 +7,7 @@ import org.springframework.stereotype.Repository;
 @Repository // 스프링에 등록
 public interface MemoUserRepository extends JpaRepository<MemoUserDTO, Long> { // <사용할 엔터티, 엔터티 ID타입>
     // loginId와 password를 사용해서 User를 찾는 메소드
+
+    // loginId로 User를 찾는 메소드
+    public MemoUserDTO findByLoginId(String loginId);
 }
