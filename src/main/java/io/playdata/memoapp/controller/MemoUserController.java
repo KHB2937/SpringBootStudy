@@ -36,6 +36,8 @@ public class MemoUserController {
             if (login != null) { // set 안해준 attribute는 null 취급
                 // session은 있는데 login을 안한 거
                 if ((boolean) login) { // 형변환
+                    // (조건 ? true 값 : false 값)
+                    // (name != null ? name : "알 수 없음")
                     model.addAttribute("msg",  (name != null ? name : "알 수 없음") + "님의 로그인을 환영합니다");
                     return "main"; // forward
                 }
@@ -100,5 +102,21 @@ public class MemoUserController {
         // db 같은 저장 (Spring Session) -> cookie : Session ID
 //        return "main";
         return "redirect:/"; // index
+    }
+
+    // get /logout
+    @GetMapping("/logout")
+    public String logout(HttpSession session,
+                         RedirectAttributes redirectAttributes,
+                         HttpServletResponse response) {
+        if (session != null) { // 세션이 존재하면
+            session.invalidate(); // 세션이 만료 및 삭제
+            Cookie cookie = new Cookie("name", null);
+            cookie.setMaxAge(0);
+            cookie.setPath("/");
+            response.addCookie(cookie);
+            redirectAttributes.addFlashAttribute("msg", "정상적으로 로그아웃 되었습니다");
+        }
+        return "redirect:/";
     }
 }
