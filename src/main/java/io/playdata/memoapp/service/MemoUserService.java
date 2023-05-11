@@ -9,6 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 @Service // 스프링에 Service임을 등록
 public class MemoUserService {
@@ -39,8 +41,8 @@ public class MemoUserService {
             // "이미 사용중인 ID입니다" : 오류 메시지
             throw new Exception("이미 사용중인 ID입니다"); // throw new 에러 발생
         }
-        // 이미지가 아니더라도 들어감 (이미지만 들어가게!)
-        // TODO : 이미지 볼 수가 없음 (업로드한 이미지를 확인할 수 있게)
+        // 이미지가 아니더라도 들어감 (이미지만 들어가게!) -> 해결
+        // 이미지 볼 수가 없음 (업로드한 이미지를 확인할 수 있게)
         if (imageFile != null && !imageFile.isEmpty()) { // ! : not
             String contentType = imageFile.getContentType();
             // contentType 검사를 통해 jpeg, png 타입만 들어가게
@@ -67,6 +69,11 @@ public class MemoUserService {
     // loginId와 password를 통해서 유저를 찾는 서비스 메소드
     public MemoUserDTO login(String loginId, String password) {
         return memoUserRepository.findByLoginIdAndPassword(loginId, password);
+    }
+
+    public byte[] loadFile(String fileName) throws IOException { // fileName을 주면 upload 폴더 경로에 있는 파일을 읽어서 전달
+        Path filePath = Path.of(uploadPath + "/" + fileName); // 파일 경로
+        return Files.readAllBytes(filePath);
     }
 
 }

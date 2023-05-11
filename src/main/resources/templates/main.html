@@ -7,6 +7,9 @@
 <body>
     <h3 th:text="${msg}"></h3>
     <!--  location.href -> get -> get /logout  -->
+    <div>
+        <img width="240" height="180" th:src="@{'/upload/'+${img}}">
+    </div>
     <button onclick="location.href = '/logout'">로그아웃</button>
 </body>
 </html>

@@ -3,6 +3,8 @@ package io.playdata.memoapp.controller;
 import io.playdata.memoapp.model.MemoUserDTO;
 import io.playdata.memoapp.service.MemoUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +30,9 @@ public class MemoUserController {
             Model model,
             // Cookie cookie = new Cookie("name", user.getName());
             // required = false : 없어도 됨 (기본 값은 required = true)
-            @CookieValue(value = "name", required = false) String name) { // String -> 연결할 view의 이름
+            @CookieValue(value = "name", required = false) String name,
+            // 저장되어 있는 image 쿠키를 사용
+            @CookieValue(value = "image", required = false) String image) { // String -> 연결할 view의 이름
         // 로그인이 되었을 때
         if (session != null) { // session == null
             // 1) 쿠키에 저장된 session ID를 날려버렸을 때
@@ -41,6 +45,8 @@ public class MemoUserController {
                     // (조건 ? true 값 : false 값)
                     // (name != null ? name : "알 수 없음")
                     model.addAttribute("msg",  (name != null ? name : "알 수 없음") + "님의 로그인을 환영합니다");
+                    // model로 주입을 해서 main에다가 전달
+                    model.addAttribute("img", image);
                     return "main"; // forward
                 }
             }
@@ -132,9 +138,15 @@ public class MemoUserController {
 //        model.addAttribute("msg", user.getName() + "님의 로그인을 환영합니다");
         // -> redriect라서 작동 안하는 코드
         session.setAttribute("login", true); // login 여부를 true 바꾸고, 그 세션을 서버 저장
+        // 유저 이름
         Cookie cookie = new Cookie("name", user.getName());
         cookie.setMaxAge(60 * 60); // 1시간 (1초 단위)
         response.addCookie(cookie);
+        // 프로필 이미지 경로 쿠키
+        Cookie cookie2 = new Cookie("image", user.getImage());
+        // 로그인 시 이미지 파일 이름을 쿠키에다가 주입
+        cookie.setMaxAge(60 * 60 * 24); // 1일 (1초 단위)
+        response.addCookie(cookie2);
         // db 같은 저장 (Spring Session) -> cookie : Session ID
 //        return "main";
         return "redirect:/"; // index
@@ -147,12 +159,24 @@ public class MemoUserController {
                          HttpServletResponse response) {
         if (session != null) { // 세션이 존재하면
             session.invalidate(); // 세션이 만료 및 삭제
+            // 이름 쿠키
             Cookie cookie = new Cookie("name", null);
             cookie.setMaxAge(0);
             cookie.setPath("/");
             response.addCookie(cookie);
+            // 이미지 쿠키
+            Cookie cookie2 = new Cookie("image", null);
+            cookie.setMaxAge(0);
+            cookie.setPath("/");
+            response.addCookie(cookie2);
             redirectAttributes.addFlashAttribute("msg", "정상적으로 로그아웃 되었습니다");
         }
         return "redirect:/";
+    }
+
+    @GetMapping("/upload/{filename}")
+    public ResponseEntity upload(@PathVariable String filename) throws IOException {
+        byte[] byteArray = memoUserService.loadFile(filename);
+        return new ResponseEntity(byteArray, HttpStatus.OK); // byteArray를 전달해줄 것이고, 정상이라는 응답
     }
 }
