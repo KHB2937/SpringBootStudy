@@ -65,6 +65,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin() // form 사용해서 로그인할 것이다
                 .loginPage("/login") // 로그인 페이지 URL
                 .defaultSuccessUrl("/home") // 로그인 성공 후 이용할 URL
+                .permitAll()
+                // 로그아웃
+                .and()
+                .logout()
+                .logoutUrl("/logout") // 로그아웃 시 쓰일 URL
+                .logoutSuccessUrl("/login?logout") // 로그아웃 성공시 이동할 페이지
+                .invalidateHttpSession(true) // 로그아웃 시 세션 무효화
+                .deleteCookies("JSESSIONID") // 로그아웃 시 삭제할 쿠키 이름 지정
                 .permitAll();
         // TODO : ???
     }
