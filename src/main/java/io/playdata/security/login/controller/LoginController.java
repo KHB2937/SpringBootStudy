@@ -19,15 +19,16 @@ public class LoginController {
     private String postRegister(
         AccountDTO user,
         RedirectAttributes redirectAttributes
-    ) {
+    ) throws Exception {
         // throws -> 에러처리 상위 메소드로 위임
-        try {
-            loginService.register(user);
-        } catch (Exception e) {
-//            throw new Exception("...") -> msg
-            redirectAttributes.addFlashAttribute("msg", e.getMessage());
-            return "redirect:/register";
-        }
+//        try {
+//            loginService.register(user);
+//        } catch (Exception e) {
+////            throw new Exception("...") -> msg
+//            redirectAttributes.addFlashAttribute("msg", e.getMessage());
+//            return "redirect:/register";
+//        }
+        loginService.register(user);
         redirectAttributes.addFlashAttribute("msg", "정상적으로 등록됐습니다");
         return "redirect:/login"; // ~/login 페이지로 리다이렉트
     }
@@ -55,5 +56,17 @@ public class LoginController {
     @GetMapping("/home")
     public String home() {
         return "home";
+    }
+
+    @GetMapping("/access-denied")
+    public String error(Model model) {
+        model.addAttribute("msg", "접근이 거부되었습니다");
+        return "error";
+    }
+
+    @GetMapping("/login-fail")
+    public String error2(Model model) {
+        model.addAttribute("msg", "로그인에 실패했습니다");
+        return "error";
     }
 }
