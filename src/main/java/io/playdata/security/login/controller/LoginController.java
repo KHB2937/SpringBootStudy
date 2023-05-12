@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -33,10 +32,28 @@ public class LoginController {
         return "redirect:/login"; // ~/login 페이지로 리다이렉트
     }
 
+    // http://localhost:8080/register
     @GetMapping("register")
     public String getRegister(Model model) {
-        // TODO : 로그인 여부를 감지해서 들어오지 못하게
         model.addAttribute("user", new AccountDTO());
         return "register"; // templates/register.html
+    }
+
+    // http://localhost:8080
+    @GetMapping // index
+    public String index() {
+        return "redirect:/home";
+    }
+
+    // http://localhost:8080/login
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
+    // http://localhost:8080/home
+    @GetMapping("/home")
+    public String home() {
+        return "home";
     }
 }
