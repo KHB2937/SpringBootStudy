@@ -10,8 +10,8 @@ import javax.persistence.*;
 public class AccountDTO {
     @Id // Repository를 사용할 때 검색하는 기본 ID로 사용해줄 속성
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 생성할 때마다 1씩 늘어나면서 자동으로 부여
-    Long id;
-    String username;
-    String password;
-    String role;
+    private Long id;
+    private String username;
+    private String password;
+    private String role;
 }
