@@ -16,6 +16,7 @@ public class ContentsController {
         return "contents";
     }
 
+    // http://localhost:8080/contents/premium
     @GetMapping("/premium")
     public String getPremium(Model model) {
         model.addAttribute("grade", "프리미엄 등급");

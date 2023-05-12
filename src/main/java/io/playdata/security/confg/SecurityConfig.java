@@ -58,8 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/login").permitAll() // 인증없이 login 페이지 사용 가능
-                .antMatchers("/register").permitAll() // 인증없이 register 페이지 사용 가능
+                .antMatchers("/register").anonymous() // 비가입자만 register 페이지 사용 가능
                 .antMatchers("/contents/basic").hasAnyRole("basic", "premium")
                 .antMatchers("/contents/premium").hasRole("premium")
                 .anyRequest().authenticated() // 나머지 요청은 인증 필요
@@ -76,6 +75,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true) // 로그아웃 시 세션 무효화
                 .deleteCookies("JSESSIONID") // 로그아웃 시 삭제할 쿠키 이름 지정
                 .permitAll();
-        // TODO : ???
     }
 }
