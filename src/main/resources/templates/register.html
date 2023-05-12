@@ -26,6 +26,7 @@
         <div>
             <label>Role: </label>
             <select name="role" th:field="*{role}">
+                <option value="free" th:selected="${user.role = 'free'}">Free</option>
                 <option value="basic" th:selected="${user.role = 'basic'}">Basic</option>
                 <option value="premium" th:selected="${user.role = 'premium'}">Premium</option>
             </select>

@@ -60,6 +60,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/login").permitAll() // 인증없이 login 페이지 사용 가능
                 .antMatchers("/register").permitAll() // 인증없이 register 페이지 사용 가능
+                .antMatchers("/contents/basic").hasAnyRole("basic", "premium")
+                .antMatchers("/contents/premium").hasRole("premium")
                 .anyRequest().authenticated() // 나머지 요청은 인증 필요
                 .and()
                 .formLogin() // form 사용해서 로그인할 것이다
