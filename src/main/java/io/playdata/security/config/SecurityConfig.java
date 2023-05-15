@@ -79,6 +79,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/login") // 커스텀 로그인 페이지 경로
                 .defaultSuccessUrl("/home") // 로그인 성공 후 이동할 페이지 경로
+                .failureUrl("/login-fail")
+                // 로그인 실패 시 이동할 url을 입력
                 .permitAll()
                 .and()
                 // ** 로그아웃을 처리하는 부분
@@ -89,6 +91,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 2 : 세션과 쿠키를 어떻게 할것인가?
                 .invalidateHttpSession(true) // .invalidateHttpSession : 세션 비활성화
                 .deleteCookies("JSESSIONID") // JSESSIONID : Java를 통해서 생성된 SESSION ID
-                .permitAll();
+                .permitAll()
+                // 인가에 따른 (403) 문제를 처리
+                .and()
+                .exceptionHandling()
+                .accessDeniedPage("/access-denied")
+//                .accessDeniedHandler()
+        ;
     }
 }

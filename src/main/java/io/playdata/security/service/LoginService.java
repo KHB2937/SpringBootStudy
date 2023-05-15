@@ -1,5 +1,7 @@
 package io.playdata.security.service;
 
+import io.playdata.security.exception.UniqueUsernameException;
+import io.playdata.security.exception.UsernameLengthException;
 import io.playdata.security.model.Account;
 import io.playdata.security.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +30,23 @@ public class LoginService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    public void join(Account account) {
+    public void join(Account account) throws Exception {
         // 중복이나 기타...
+        // exists -> 존재하면 true, 없으면 false
+        // find -> 존재하면 (..), 없으면 null -> != null => exists
+        if(account.getUsername().length() < 5) {
+//            throw new Exception("5글자보다 긴 Username이어야 합니다");
+            // UsernameLengthException -> /join
+//            throw new UsernameLengthException("5글자보다 긴 Username이어야 합니다");
+            throw new UsernameLengthException(5);
+        }
+        if(accountRepository.existsByUsername(account.getUsername())) {
+            // accountRepository.existsByUsername(account.getUsername()) -> username을 통해서 중복 확인
+//            throw new Exception("중복된 Username 입니다");
+            // UniqueUsernameException -> /login
+//            throw new UniqueUsernameException("중복된 Username 입니다");
+            throw new UniqueUsernameException();
+        }
         // Encoded password does not look like BCrypt (인코딩 안했을 때 오류)
         account.setPassword(passwordEncoder.encode(account.getPassword()));
         // 일반적인 텍스트로 들어왔던 비밀번호를 bcrypt로 해싱
