@@ -12,10 +12,21 @@
     <p th:text="${#authentication.principal.username}"></p>
     <p th:text="${#authentication.authorities.![authority].get(0)}"></p>
 </div>
-<br>
-<div>
-    <button type="button" onclick="location.href = '/basic'">Basic</button>
-    <button type="button" onclick="location.href = '/gold'">Gold</button>
+<div th:with="role = ${#authentication.authorities.![authority].get(0)}">
+<!--    <p th:text="${role}"></p>-->
+<!--    <div th:if="${#authentication.authorities.![authority].get(0) == 'ROLE_free'}">-->
+    <div th:if="${role == 'ROLE_free'}">
+        <p>무료 회원입니다! 시청을 위해선 결제해주세요!</p>
+    </div>
+    <div th:if="${role == 'ROLE_basic'}">
+        <p>베이직 회원입니다! 베이직 영화를 시청 가능합니다!</p>
+        <button type="button" onclick="location.href = '/basic'">Basic</button>
+    </div>
+    <div th:if="${role == 'ROLE_gold'}">
+        <p>골드 회원입니다! 모든 영화를 시청 가능합니다!</p>
+        <button type="button" onclick="location.href = '/basic'">Basic</button>
+        <button type="button" onclick="location.href = '/gold'">Gold</button>
+    </div>
 </div>
 <br>
 <form th:action="@{/logout}" method="post">
