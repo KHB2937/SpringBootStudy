@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
+    Account findByUsername(String username); // JPA 메소드 생성규칙
 }
