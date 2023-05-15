@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Movie</title>
+</head>
+<body>
+<h2>Movie</h2>
+<div>
+    <p>free, basic, gold</p>
+    <p th:text="${grade}"></p> <!-- model attribute로 grade -->
+</div>
+<br>
+<button onclick="location.href = '/'">메인으로 가기</button>
+</body>
+</html>

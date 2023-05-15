@@ -65,18 +65,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                // 권한이나 보안 설정
                 .authorizeRequests()
                 .antMatchers("/login").permitAll() // 로그인 페이지는 모든 사용자에게 허용
                 .antMatchers("/join").permitAll() // 가입 페이지는 모든 사용자에게 허용
-                .anyRequest().authenticated() // 나머지 요청은 인증이 필요
+                .antMatchers("/basic").hasAnyRole("basic", "gold") // 이것들 중에 특정한 권한이 있다면 접속 허용
+                .antMatchers("/gold").hasRole("gold") // 1개의 권한만 허용
+                // 403 -> 권한이 없는 사람이 들어가려고 하면 403 에러
+                .anyRequest().authenticated() // 나머지 요청은 인증(로그인만 의미)이 필요
+                // 401 -> 로그인 안되어있으면 401 에러가 나고 있는데... Spring Security가 알아서 login 페이지로...
                 .and()
+                // ** 로그인을 처리하는 부분
                 .formLogin()
                 .loginPage("/login") // 커스텀 로그인 페이지 경로
                 .defaultSuccessUrl("/home") // 로그인 성공 후 이동할 페이지 경로
                 .permitAll()
                 .and()
+                // ** 로그아웃을 처리하는 부분
                 .logout()
                 .logoutSuccessUrl("/login") // 로그아웃 성공 후 이동할 페이지 경로
+                // 1 : 어느경로로 로그아웃 요청을 받을 것인가?
+                .logoutUrl("/logout") // post 요청을 하게 되면 처리
+                // 2 : 세션과 쿠키를 어떻게 할것인가?
+                .invalidateHttpSession(true) // .invalidateHttpSession : 세션 비활성화
+                .deleteCookies("JSESSIONID") // JSESSIONID : Java를 통해서 생성된 SESSION ID
                 .permitAll();
     }
 }

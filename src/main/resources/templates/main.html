@@ -6,5 +6,20 @@
 </head>
 <body>
 <h2>Main</h2>
+<div>
+    <h3>유저 정보</h3>
+<!--    <p th:text="${#authentication}"></p>-->
+    <p th:text="${#authentication.principal.username}"></p>
+    <p th:text="${#authentication.authorities.![authority].get(0)}"></p>
+</div>
+<br>
+<div>
+    <button type="button" onclick="location.href = '/basic'">Basic</button>
+    <button type="button" onclick="location.href = '/gold'">Gold</button>
+</div>
+<br>
+<form th:action="@{/logout}" method="post">
+    <button>로그아웃</button>
+</form>
 </body>
 </html>
