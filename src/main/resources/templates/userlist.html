@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>회원관리 페이지</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background-color: lightgray;
+    }
+  </style>
+</head>
+<body>
+<h1>회원관리</h1>
+<h2 th:text="${msg}"></h2>
+<table>
+  <tr>
+    <th>번호</th>
+    <th>로그인 ID</th>
+    <th>이름</th>
+    <th>등급</th>
+    <th>수정</th>
+    <th>삭제</th>
+  </tr>
+  <!-- userList를 반복하여 회원 데이터를 출력 -->
+  <tr th:each="user, index : ${userList}">
+    <td th:text="${index.index + 1}"></td>
+    <td th:text="${user.loginID}"></td>
+    <td th:text="${user.name}"></td>
+    <td th:text="${user.role}"></td>
+    <td>
+        <form th:action="@{/edit}" method="get">
+        <input type="hidden" name="id" th:value="${user.id}" />
+        <button type="submit">수정</button>
+      </form>
+    </td>
+    <td>
+      <form th:action="@{/delete}" method="get" onsubmit="return confirm('정말로 삭제하시겠습니까?');">
+        <input type="hidden" name="id" th:value="${user.id}" />
+        <button type="submit">삭제</button>
+      </form>
+    </td>
+  </tr>
+</table>
+<button><a href="/main">뒤로가기</a></button>
+
+</body>
+</html>

@@ -10,8 +10,9 @@ import javax.persistence.Id;
 @Data
 public class Account {
     @Id @GeneratedValue
-    Long id;
-    String loginID;
-    String password;
-    String name;
+    private Long id;
+    private String loginID;
+    private String password;
+    private String name;
+    private String role;
 }

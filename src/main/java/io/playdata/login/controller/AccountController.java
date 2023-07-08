@@ -2,6 +2,7 @@ package io.playdata.login.controller;
 
 import io.playdata.login.model.Account;
 import io.playdata.login.service.AccountService;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +12,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller // thymeleaf 파일을 사용해서 View
 @RequestMapping // ('/') -> 루트 경로
@@ -111,5 +113,42 @@ public class AccountController {
                     "정상적으로 로그아웃되었습니다");
         }
         return "redirect:/";
+    }
+
+    @GetMapping("/userlist")
+    public String getUserList(Model model) {
+        // 회원 목록 데이터를 조회하고 모델에 추가하는 로직을 작성
+        List<Account> userList = accountService.getAllAccounts();
+        model.addAttribute("userList", userList);
+
+        return "userlist"; // 사용할 Thymeleaf 템플릿 파일의 이름
+    }
+    // 수정 페이지
+    @GetMapping("/edit")
+    public String showUpdatePage(@RequestParam("id") Long id, Model model) {
+        // id에 해당하는 회원 정보 조회
+        Account account = accountService.getAccountById(id);
+        if (account == null) {
+            // 회원 정보가 없으면 적절한 에러 처리
+            return "error";  // 에러 페이지로 이동하거나 다른 방식으로 처리할 수 있음
+        }
+
+        model.addAttribute("user", account);
+        return "edit";  // 수정 페이지로 이동
+    }
+
+    // 수정 작업 처리
+    @PostMapping("/update")
+    public String update(@ModelAttribute("user") Account account) {
+        // 회원 정보 업데이트 작업 수행
+        accountService.updateUser(account);
+        return "redirect:/userlist";  // 수정 완료 후 회원 목록 페이지로 이동
+    }
+
+    @GetMapping("/delete")
+    public String deleteAccount(@RequestParam("id") Long id) {
+        // 회원 정보 삭제 작업 수행
+        accountService.deleteAccountById(id);
+        return "redirect:/userlist";  // 삭제 완료 후 회원 목록 페이지로 이동
     }
 }
