@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>가입</title>
+</head>
+<body>
+    <!-- /join => model.addAttribute("user", new MemoUserDTO()); -->
+    <!-- id (자동), loginId, password, name, image (file) -->
+    <form action="/join" method="post" enctype="multipart/form-data"
+    th:object="${user}"> <!-- form에다가 컨트롤러부터 전달받은 객체를 연결 -->
+        <div>
+            <label>로그인 ID :</label>
+            <input name="loginId"> <!-- 기본이 text라 연결 안해줘도 됨 -->
+        </div>
+        <div>
+            <label>비밀번호 : </label>
+            <input type="password" name="password">
+        </div>
+        <!-- emmet -->
+        <div>
+            <label>이름 : </label>
+            <input type="text" name="name">
+        </div>
+        <div>
+            <label>이미지 : </label>
+<!--            <input type="text" name="image">-->
+            <!-- 프로필 이미지 업로드 -->
+<!--            <input type="file" name="imageFile">-->
+<!--            <input type="file" name="imageFile" accept="image/jpeg,image/png">-->
+            <input type="file" name="imageFile" accept="image/*">
+        </div>
+        <br>
+        <div>
+            <button>가입</button>
+            <button type="button" onclick="location.href= '/'">취소</button>
+        </div>
+        <h3 th:text="${msg}"></h3>
+    </form>
+</body>
+</html>
