@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>수정 페이지</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background-color: lightgray;
+    }
+  </style>
+</head>
+<body>
+<form th:action="@{/update}" method="post">
+  <input type="hidden" name="id" th:value="${user.id}" />
+  <div>
+    <label for="loginID">로그인 ID:</label>
+    <input type="text" id="loginID" name="loginID" th:value="${user.loginID}" required />
+  </div>
+  <div>
+    <label for="name">이름:</label>
+    <input type="text" id="name" name="name" th:value="${user.name}" required />
+  </div>
+  <div>
+    <label for="role">등급:</label>
+    <select id="role" name="role">
+      <option value="user" th:selected="${user.role == 'user'}">User</option>
+      <option value="admin" th:selected="${user.role == 'admin'}">Admin</option>
+    </select>
+  </div>
+  <button type="submit">수정</button>
+</form>
+</body>
+</html>
