@@ -1,1 +1,1 @@
-# SpringBootStudy
+# 스프링 교육과정 수업내용 정리 및 복습
