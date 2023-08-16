@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Diary List</title>
+</head>
+<body>
+<h1>Diary List</h1>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Content</th>
+        <th>Image</th>
+        <th>Sound</th>
+        <th>Created At</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- 모든 다이어리를 조회하여 테이블 형태로 출력한다. -->
+    <tr th:each="diary : ${diaries}">
+        <td th:text="${diary.id}"></td>
+        <td th:text="${diary.title}"></td>
+        <td th:text="${diary.content}"></td>
+        <td th:text="${diary.image}"></td>
+        <td th:text="${diary.sound}"></td>
+        <td th:text="${diary.createAt}"></td>
+        <td>
+            <!-- 수정 및 삭제 기능 구현을 위해 링크 생성 -->
+            <!--            <a th:href="@{/diaries/__${diary.id}__/edit}">Edit</a>-->
+            <a th:href="@{/__${diary.id}__/}">Edit</a>
+            <a th:href="@{/__${diary.id}__/delete}">Delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<!-- 다이어리 생성을 위한 폼 생성 -->
+<h2>Create a new diary</h2>
+<form th:action="@{/}" method="post" enctype="multipart/form-data">
+    <div>
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title">
+    </div>
+    <div>
+        <label for="content">Content:</label>
+        <textarea id="content" name="content"></textarea>
+    </div>
+    <div>
+        <label for="image">Image:</label>
+        <input type="file" id="image" name="imageFile"> <!-- RequestParam과 대응 되게 -->
+    </div>
+    <div>
+        <label for="sound">Sound:</label>
+        <input type="file" id="sound" name="soundFile"> <!-- RequestParam과 대응 되게 -->
+    </div>
+    <button type="submit">Create</button>
+</form>
+</body>
+</html>
