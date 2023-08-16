@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Photo</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1 class="mt-5">Photo List</h1>
+    <table class="table table-striped table-hover mt-3">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Image</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- 모든 사진 데이터를 반복해서 출력합니다. -->
+        <tr th:each="photo : ${photos}">
+            <td th:text="${photo.id}"></td>
+            <td th:text="${photo.title}"></td>
+            <td th:text="${photo.description}"></td>
+            <td><img th:src="${photo.imageUrl}" width="200" height="200"></td>
+            <td>
+                <a class="btn btn-primary" th:href="@{/edit/{id}(id=${photo.id})}">Edit</a>
+                <a class="btn btn-danger" th:href="@{/delete/{id}(id=${photo.id})}" onclick="return confirm('Are you sure you want to delete this photo?')">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <a class="btn btn-success mb-3" href="/add">Add Photo</a>
+    <!-- 메시지가 있으면 출력합니다. -->
+    <p class="text-success fw-bold" th:text="${message}" th:if="${message != null}"></p>
+</div>
+</body>
+</html>
